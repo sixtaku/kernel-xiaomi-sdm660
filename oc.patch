@@ -171,6 +171,12 @@ index 9677fc7ad5ad..337a0670eb8f 100644
  
  		qcom,perfcl-speedbin4-v0 =
  			<   300000000 0x0004000f 0x01200020 0x1 1 >,
+@@ -2803,4 +2806,4 @@
+ 
+ #include "sdm660-mdss.dtsi"
+ #include "sdm660-mdss-pll.dtsi"
+-#include "sdm636-thermal.dtsi"
++#include "sdm660-thermal.dtsi"
 diff --git a/arch/arm/boot/dts/qcom/sdm660_e7t.dtsi b/arch/arm/boot/dts/qcom/sdm660_e7t.dtsi
 index 9febf390c03d..b06f34a330c1 100644
 --- a/arch/arm/boot/dts/qcom/sdm660_e7t.dtsi
@@ -268,3 +274,9 @@ index 9febf390c03d..b06f34a330c1 100644
  
  		qcom,perfcl-speedbin4-v0 =
  			<   300000000 0x0004000f 0x01200020 0x1 1 >,
+@@ -2803,4 +2806,4 @@
+ 
+ #include "sdm660-mdss.dtsi"
+ #include "sdm660-mdss-pll.dtsi"
+-#include "sdm636-thermal.dtsi"
++#include "sdm660-thermal.dtsi"
