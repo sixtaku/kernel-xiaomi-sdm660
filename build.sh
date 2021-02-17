@@ -2,11 +2,11 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=REBASE-Izanagi
+export LOCALVERSION=Tsukuyomi-TEST
 
-export KBUILD_BUILD_USER=Frost
+export KBUILD_BUILD_USER=frost_id
 
-export KBUILD_BUILD_HOST=Otaku
+export KBUILD_BUILD_HOST=unubsargang
 
 export TOOLCHAIN=clang
 
