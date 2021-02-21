@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Tsukuyomi-TEST
+export LOCALVERSION=Hikari-TEST
 
 export KBUILD_BUILD_USER=Frost
 
