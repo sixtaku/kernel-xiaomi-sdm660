@@ -2,11 +2,11 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Hikari-TEST
+export LOCALVERSION=Hikari-v1.9
 
-export KBUILD_BUILD_USER=Frost
+export KBUILD_BUILD_USER=frost
 
-export KBUILD_BUILD_HOST=Otaku
+export KBUILD_BUILD_HOST=otaku
 
 export TOOLCHAIN=clang
 
