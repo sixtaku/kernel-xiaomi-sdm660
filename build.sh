@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Hikari-v1.9
+export LOCALVERSION=Fuyuki-v2.0-TEST
 
 export KBUILD_BUILD_USER=frost
 
