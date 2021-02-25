@@ -1,0 +1,230 @@
+diff --git a/arch/arm/boot/dts/qcom/sdm660_e7s.dtsi b/arch/arm/boot/dts/qcom/sdm660_e7s.dtsi
+index 1e878ddf397b..5dec48c8d1b1 100644
+--- a/arch/arm/boot/dts/qcom/sdm660_e7s.dtsi
++++ b/arch/arm/boot/dts/qcom/sdm660_e7s.dtsi
+@@ -56,7 +56,7 @@
+ 			qcom,limits-info = <&mitigation_profile0>;
+ 			qcom,lmh-dcvs = <&lmh_dcvs0>;
+ 			qcom,ea = <&ea0>;
+-			efficiency = <615>;
++			efficiency = <635>;
+ 			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
+ 			next-level-cache = <&L2_0>;
+ 			L2_0: l2-cache {
+@@ -87,7 +87,7 @@
+ 			qcom,limits-info = <&mitigation_profile0>;
+ 			qcom,lmh-dcvs = <&lmh_dcvs0>;
+ 			qcom,ea = <&ea1>;
+-			efficiency = <615>;
++			efficiency = <635>;
+ 			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
+ 			next-level-cache = <&L2_0>;
+ 			L1_I_1: l1-icache {
+@@ -112,7 +112,7 @@
+ 			qcom,limits-info = <&mitigation_profile0>;
+ 			qcom,lmh-dcvs = <&lmh_dcvs0>;
+ 			qcom,ea = <&ea2>;
+-			efficiency = <615>;
++			efficiency = <635>;
+ 			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
+ 			next-level-cache = <&L2_0>;
+ 			L1_I_2: l1-icache {
+@@ -137,7 +137,7 @@
+ 			qcom,limits-info = <&mitigation_profile0>;
+ 			qcom,lmh-dcvs = <&lmh_dcvs0>;
+ 			qcom,ea = <&ea3>;
+-			efficiency = <615>;
++			efficiency = <635>;
+ 			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
+ 			next-level-cache = <&L2_0>;
+ 			L1_I_3: l1-icache {
+@@ -301,23 +301,26 @@
+ 
+ 			CPU_COST_0: core-cost0 {
+ 				busy-cost-data = <
+-					633600  51
+-					902400  74
+-					1113600 88
+-					1401600 148
+-					1536000 162
+-					1612800 182
++					633600  26
++					902400  46
++					1113600 49
++					1401600 94
++					1536000 109
++					1747200 145
++					1843200 176
+ 				>;
+ 				idle-cost-data = <
+-					20 16 12 8
++					20 16 10 8
+ 				>;
+ 			};
+ 			CPU_COST_1: core-cost1 {
+ 				busy-cost-data = <
+-					1113600 291
+-					1401600 367
+-					1747200 561
+-					1804800 558
++					1113600 188
++					1401600 293
++					1747200 431
++					1958400 523
++					2150400 626
++					2208000 733
+ 				>;
+ 				idle-cost-data = <
+ 					100 80 60 40
+@@ -325,12 +328,13 @@
+ 			};
+ 			CLUSTER_COST_0: cluster-cost0 {
+ 				busy-cost-data = <
+-					633600  3
+-					902400  8
+-					1113600 13
+-					1401600 23
+-					1536000 32
+-					1612800 39
++					633600  4
++					902400  5
++					1113600 7
++					1401600 9
++					1536000 9
++					1747200 10
++					1843200 11
+ 				>;
+ 				idle-cost-data = <
+ 					4 3 2 1
+@@ -338,10 +342,12 @@
+ 			};
+ 			CLUSTER_COST_1: cluster-cost1 {
+ 				busy-cost-data = <
+-					1113600 34
+-					1401600 63
+-					1747200 111
+-					1804800 178
++					1113600 14
++					1401600 17
++					1747200 25
++					1958400 31
++					2150400 31
++					2208000 37
+ 				>;
+ 				idle-cost-data = <
+ 					4 3 2 1
+diff --git a/arch/arm/boot/dts/qcom/sdm660_e7t.dtsi b/arch/arm/boot/dts/qcom/sdm660_e7t.dtsi
+index bc5ab78f7466..1e0b69031b08 100644
+--- a/arch/arm/boot/dts/qcom/sdm660_e7t.dtsi
++++ b/arch/arm/boot/dts/qcom/sdm660_e7t.dtsi
+@@ -56,7 +56,7 @@
+ 			qcom,limits-info = <&mitigation_profile0>;
+ 			qcom,lmh-dcvs = <&lmh_dcvs0>;
+ 			qcom,ea = <&ea0>;
+-			efficiency = <615>;
++			efficiency = <635>;
+ 			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
+ 			next-level-cache = <&L2_0>;
+ 			L2_0: l2-cache {
+@@ -87,7 +87,7 @@
+ 			qcom,limits-info = <&mitigation_profile0>;
+ 			qcom,lmh-dcvs = <&lmh_dcvs0>;
+ 			qcom,ea = <&ea1>;
+-			efficiency = <615>;
++			efficiency = <635>;
+ 			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
+ 			next-level-cache = <&L2_0>;
+ 			L1_I_1: l1-icache {
+@@ -112,7 +112,7 @@
+ 			qcom,limits-info = <&mitigation_profile0>;
+ 			qcom,lmh-dcvs = <&lmh_dcvs0>;
+ 			qcom,ea = <&ea2>;
+-			efficiency = <615>;
++			efficiency = <635>;
+ 			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
+ 			next-level-cache = <&L2_0>;
+ 			L1_I_2: l1-icache {
+@@ -137,7 +137,7 @@
+ 			qcom,limits-info = <&mitigation_profile0>;
+ 			qcom,lmh-dcvs = <&lmh_dcvs0>;
+ 			qcom,ea = <&ea3>;
+-			efficiency = <615>;
++			efficiency = <635>;
+ 			sched-energy-costs = <&CPU_COST_0 &CLUSTER_COST_0>;
+ 			next-level-cache = <&L2_0>;
+ 			L1_I_3: l1-icache {
+@@ -301,23 +301,26 @@
+ 
+ 			CPU_COST_0: core-cost0 {
+ 				busy-cost-data = <
+-					633600  51
+-					902400  74
+-					1113600 88
+-					1401600 148
+-					1536000 162
+-					1612800 182
++					633600  26
++					902400  46
++					1113600 49
++					1401600 94
++					1536000 109
++					1747200 145
++					1843200 176
+ 				>;
+ 				idle-cost-data = <
+-					20 16 12 8
++					20 16 10 8
+ 				>;
+ 			};
+ 			CPU_COST_1: core-cost1 {
+ 				busy-cost-data = <
+-					1113600 291
+-					1401600 367
+-					1747200 561
+-					1804800 558
++					1113600 188
++					1401600 293
++					1747200 431
++					1958400 523
++					2150400 626
++					2208000 733
+ 				>;
+ 				idle-cost-data = <
+ 					100 80 60 40
+@@ -325,12 +328,13 @@
+ 			};
+ 			CLUSTER_COST_0: cluster-cost0 {
+ 				busy-cost-data = <
+-					633600  3
+-					902400  8
+-					1113600 13
+-					1401600 23
+-					1536000 32
+-					1612800 39
++					633600  4
++					902400  5
++					1113600 7
++					1401600 9
++					1536000 9
++					1747200 10
++					1843200 11
+ 				>;
+ 				idle-cost-data = <
+ 					4 3 2 1
+@@ -338,10 +342,12 @@
+ 			};
+ 			CLUSTER_COST_1: cluster-cost1 {
+ 				busy-cost-data = <
+-					1113600 34
+-					1401600 63
+-					1747200 111
+-					1804800 178
++					1113600 14
++					1401600 17
++					1747200 25
++					1958400 31
++					2150400 31
++					2208000 37
+ 				>;
+ 				idle-cost-data = <
+ 					4 3 2 1
