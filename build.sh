@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Fuyuki-v2.0-TEST
+export LOCALVERSION=Xtreme-Nebula-x1.0
 
 export KBUILD_BUILD_USER=frost
 
@@ -31,24 +31,6 @@ do
 	build ${i} -oldcam
 
 	build ${i} -newcam
-done
-
-send_msg "⏳ Start building Overclock version | DEVICES: whyred - tulip"
-
-send_pesan "⏳ Start building Overclock version | DEVICES: whyred - tulip"
-
-git apply oc.patch
-
-git apply energymodel.patch
-
-for i in ${DEVICES//,/ }
-do
-	if [ $i == "whyred" ] || [ $i == "tulip" ]
-	then
-		build ${i} -oldcam -overclock
-
-		build ${i} -newcam -overclock
-	fi
 done
 
 END=$(date +"%s")
