@@ -39,6 +39,8 @@ send_pesan "⏳ Start building Overclock version | DEVICES: whyred - tulip"
 
 git apply oc.patch
 
+git apply em.patch
+
 for i in ${DEVICES//,/ }
 do
 	if [ $i == "whyred" ] || [ $i == "tulip" ]
