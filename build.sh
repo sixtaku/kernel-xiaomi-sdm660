@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Mugen-v2.0
+export LOCALVERSION=Ishigami-v2.1
 
 export KBUILD_BUILD_USER=frost
 
@@ -55,6 +55,6 @@ END=$(date +"%s")
 
 DIFF=$(( END - START ))
 
-send_msg "✅ Build completed in $((DIFF / 60))m $((DIFF % 60))s, get nightly builds in @MoonlightCI | Linux version : $(make kernelversion) | Last commit: $(git log --pretty=format:'%s' -5)"
+send_msg "✅ Build completed in $((DIFF / 60))m $((DIFF % 60))s | Linux version : $(make kernelversion) | Last commit: $(git log --pretty=format:'%s' -5)"
 
 send_pesan "✅ Build completed in $((DIFF / 60))m $((DIFF % 60))s | Linux version : $(make kernelversion) | Last commit: $(git log --pretty=format:'%s' -5)"
