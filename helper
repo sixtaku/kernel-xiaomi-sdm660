@@ -34,7 +34,7 @@ send_msg(){
 	print "${1}" green
 	curl -s -X POST https://api.telegram.org/bot"${bot_token}"/sendMessage \
 		-d parse_mode="Markdown" \
-		-d chat_id="${GROUP_ID}" \
+		-d chat_id="${chat_id}" \
 		-d text="${1}"
 }
 
