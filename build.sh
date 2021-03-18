@@ -2,7 +2,7 @@
 
 export KERNELNAME=Nightmare
 
-export LOCALVERSION=
+export LOCALVERSION=v1.0
 
 export KBUILD_BUILD_USER=frost_id
 
