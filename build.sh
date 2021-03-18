@@ -20,9 +20,9 @@ source helper
 
 gen_toolchain
 
-send_msg "⏳ Start building ${KERNELNAME} ${LOCALVERSION..."
+send_msg "⏳ Start building ${KERNELNAME} ${LOCALVERSION} | DEVICES: whyred - tulip - lavender - wayne - jasmine"
 
-send_pesan "⏳ Start building ${KERNELNAME} ${LOCALVERSION..."
+send_pesan "⏳ Start building ${KERNELNAME} ${LOCALVERSION} | DEVICES: whyred - tulip - lavender - wayne - jasmine"
 
 START=$(date +"%s")
 
@@ -33,9 +33,9 @@ do
 	build ${i} -newcam
 done
 
-send_msg "⏳ Start building Overclock version..."
+send_msg "⏳ Start building Overclock version | DEVICES: whyred - tulip"
 
-send_pesan "⏳ Start building Overclock version..."
+send_pesan "⏳ Start building Overclock version | DEVICES: whyred - tulip"
 
 git apply oc.patch
 
