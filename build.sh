@@ -2,11 +2,11 @@
 
 export KERNELNAME=Nightmare
 
-export LOCALVERSION=v1.1
+export LOCALVERSION=v1.2
 
 export KBUILD_BUILD_USER=Six
 
-export KBUILD_BUILD_HOST=Project
+export KBUILD_BUILD_HOST=Server
 
 export TOOLCHAIN=clang
 
