@@ -1,12 +1,12 @@
 #!/bin/bash
 
-export KERNELNAME=Nightmare
+export KERNELNAME=Moonlight
 
-export LOCALVERSION=v1.2
+export LOCALVERSION=
 
-export KBUILD_BUILD_USER=Six
+export KBUILD_BUILD_USER=six
 
-export KBUILD_BUILD_HOST=Server
+export KBUILD_BUILD_HOST=server
 
 export TOOLCHAIN=clang
 
