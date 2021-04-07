@@ -467,8 +467,6 @@ static struct z3fold_pool *z3fold_create_pool(const char *name, gfp_t gfp,
 	spin_lock_init(&pool->lock);
 	spin_lock_init(&pool->stale_lock);
 	pool->unbuddied = __alloc_percpu(sizeof(struct list_head)*NCHUNKS, 2);
-	if (!pool->unbuddied)
-		goto out_pool;
 	for_each_possible_cpu(cpu) {
 		struct list_head *unbuddied =
 				per_cpu_ptr(pool->unbuddied, cpu);
@@ -481,7 +479,7 @@ static struct z3fold_pool *z3fold_create_pool(const char *name, gfp_t gfp,
 	pool->name = name;
 	pool->compact_wq = create_singlethread_workqueue(pool->name);
 	if (!pool->compact_wq)
-		goto out_unbuddied;
+		goto out;
 	pool->release_wq = create_singlethread_workqueue(pool->name);
 	if (!pool->release_wq)
 		goto out_wq;
@@ -491,11 +489,8 @@ static struct z3fold_pool *z3fold_create_pool(const char *name, gfp_t gfp,
 
 out_wq:
 	destroy_workqueue(pool->compact_wq);
-out_unbuddied:
-	free_percpu(pool->unbuddied);
-out_pool:
-	kfree(pool);
 out:
+	kfree(pool);
 	return NULL;
 }
 
