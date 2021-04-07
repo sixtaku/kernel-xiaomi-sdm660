@@ -185,12 +185,6 @@ static inline void z3fold_page_lock(struct z3fold_header *zhdr)
 	spin_lock(&zhdr->page_lock);
 }
 
-/* Try to lock a z3fold page */
-static inline int z3fold_page_trylock(struct z3fold_header *zhdr)
-{
-	return spin_trylock(&zhdr->page_lock);
-}
-
 /* Unlock a z3fold page */
 static inline void z3fold_page_unlock(struct z3fold_header *zhdr)
 {
@@ -391,7 +385,7 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
 			spin_lock(&pool->lock);
 			zhdr = list_first_entry_or_null(&pool->unbuddied[i],
 						struct z3fold_header, buddy);
-			if (!zhdr || !z3fold_page_trylock(zhdr)) {
+			if (!zhdr) {
 				spin_unlock(&pool->lock);
 				continue;
 			}
@@ -400,6 +394,7 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
 			spin_unlock(&pool->lock);
 
 			page = virt_to_page(zhdr);
+			z3fold_page_lock(zhdr);
 			if (zhdr->first_chunks == 0) {
 				if (zhdr->middle_chunks != 0 &&
 				    chunks >= zhdr->start_middle)
