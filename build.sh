@@ -2,9 +2,9 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=
+export LOCALVERSION=Arashi-v2.3
 
-export KBUILD_BUILD_USER=six
+export KBUILD_BUILD_USER=Six
 
 export KBUILD_BUILD_HOST=server
 
