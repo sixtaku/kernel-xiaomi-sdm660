@@ -1,16 +1,16 @@
 #!/bin/bash
 
-export KERNELNAME=Moonlight
+export KERNELNAME=GAME-YOUR-KNTL
 
-export LOCALVERSION=Mirai-v2.4
+export LOCALVERSION=GAME|YOUR|KNTL
 
-export KBUILD_BUILD_USER=Six
+export KBUILD_BUILD_USER=Athaya
 
 export KBUILD_BUILD_HOST=server
 
 export TOOLCHAIN=clang
 
-export DEVICES=whyred,tulip,lavender,a26x
+export DEVICES=whyred
 
 export CI_ID=-1001463706805
 
