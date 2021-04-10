@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Arashi-v2.3
+export LOCALVERSION=Mirai-v2.4
 
 export KBUILD_BUILD_USER=Six
 
