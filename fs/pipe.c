@@ -134,7 +134,7 @@ static void anon_pipe_buf_release(struct pipe_inode_info *pipe,
 	if (page_count(page) == 1 && !pipe->tmp_page)
 		pipe->tmp_page = page;
 	else
-		put_page(page);
+		page_cache_release(page);
 }
 
 /**
@@ -211,7 +211,7 @@ EXPORT_SYMBOL(generic_pipe_buf_confirm);
 void generic_pipe_buf_release(struct pipe_inode_info *pipe,
 			      struct pipe_buffer *buf)
 {
-	put_page(buf->page);
+	page_cache_release(buf->page);
 }
 EXPORT_SYMBOL(generic_pipe_buf_release);
 

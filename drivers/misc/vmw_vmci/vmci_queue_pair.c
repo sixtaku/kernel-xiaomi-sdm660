@@ -737,7 +737,7 @@ static void qp_release_pages(struct page **pages,
 		if (dirty)
 			set_page_dirty_lock(pages[i]);
 
-		put_page(pages[i]);
+		page_cache_release(pages[i]);
 		pages[i] = NULL;
 	}
 }

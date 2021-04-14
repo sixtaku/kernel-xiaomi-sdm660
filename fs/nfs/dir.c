@@ -721,7 +721,7 @@ int nfs_readdir_filler(nfs_readdir_descriptor_t *desc, struct page* page)
 static
 void cache_page_release(nfs_readdir_descriptor_t *desc)
 {
-	put_page(desc->page);
+	page_cache_release(desc->page);
 	desc->page = NULL;
 }
 
@@ -1946,7 +1946,7 @@ int nfs_symlink(struct inode *dir, struct dentry *dentry, const char *symname)
 		 * add_to_page_cache_lru() grabs an extra page refcount.
 		 * Drop it here to avoid leaking this page later.
 		 */
-		put_page(page);
+		page_cache_release(page);
 	} else
 		__free_page(page);
 
