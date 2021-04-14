@@ -12393,7 +12393,11 @@ QDF_STATUS send_set_arp_stats_req_cmd_tlv(wmi_unified_t wmi_handle,
 		goto error;
 	}
 
+<<<<<<< HEAD
 	WMI_LOGD(FL("set arp stats flag=%d, vdev=%d"),
+=======
+	WMI_LOGI(FL("set arp stats flag=%d, vdev=%d"),
+>>>>>>> 6ebd398a1be8... Merge tag 'LA.UM.7.2.r1-07200-sdm660.0' of https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/wlan/qca-wifi-host-cmn into android-4.4-p
 		 req_buf->flag, req_buf->vdev_id);
 	return QDF_STATUS_SUCCESS;
 error:
