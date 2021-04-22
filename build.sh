@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Nikki-v2.5
+export LOCALVERSION=Khususon
 
 export KBUILD_BUILD_USER=Six
 
