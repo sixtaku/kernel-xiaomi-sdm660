@@ -2,11 +2,11 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Ryuu-v2.6
+export LOCALVERSION=Kanon-v2.7
 
 export KBUILD_BUILD_USER=Six
 
-export KBUILD_BUILD_HOST=server
+export KBUILD_BUILD_HOST=DroneCI
 
 export TOOLCHAIN=clang
 
