@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Kanon-v2.7
+export LOCALVERSION=Taka-v2.8
 
 export KBUILD_BUILD_USER=Six
 
