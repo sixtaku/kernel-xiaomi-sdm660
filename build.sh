@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Taka-v2.8
+export LOCALVERSION=SayuWangy-v2.9
 
 export KBUILD_BUILD_USER=Six
 
