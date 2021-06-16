@@ -2,9 +2,9 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=SayuWangy-v2.9
+export LOCALVERSION=Scythe-v3.0
 
-export KBUILD_BUILD_USER=Six
+export KBUILD_BUILD_USER=Sixzz
 
 export KBUILD_BUILD_HOST=DroneCI
 
