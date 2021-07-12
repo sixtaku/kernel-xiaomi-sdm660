@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Takashi-v3.1
+export LOCALVERSION=Spiral-v3.2
 
 export KBUILD_BUILD_USER=Sixzz
 
