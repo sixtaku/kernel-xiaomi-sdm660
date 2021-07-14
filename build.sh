@@ -10,7 +10,7 @@ export KBUILD_BUILD_HOST=DroneCI
 
 export TOOLCHAIN=clang
 
-export DEVICES=whyred,tulip,lavender,a26x
+export DEVICES=lavender
 
 export CI_ID=-1001463706805
 
