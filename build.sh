@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Freedom-v3.6
+export LOCALVERSION=Chaos-v3.7
 
 export KBUILD_BUILD_USER=Sixzz
 
