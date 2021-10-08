@@ -2,9 +2,9 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Swallow-v3.9
+export LOCALVERSION=Sagiri-v4.0
 
-export KBUILD_BUILD_USER=Sixzz
+export KBUILD_BUILD_USER=Sxzz
 
 export KBUILD_BUILD_HOST=DroneCI
 
