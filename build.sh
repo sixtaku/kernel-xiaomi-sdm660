@@ -2,7 +2,7 @@
 
 export KERNELNAME=Moonlight
 
-export LOCALVERSION=Sagiri-v4.0
+export LOCALVERSION=Elaina-v4.1
 
 export KBUILD_BUILD_USER=Sxzz
 
