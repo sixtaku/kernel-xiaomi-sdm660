@@ -232,16 +232,293 @@ int __ion_phys(struct ion_buffer *buffer, ion_phys_addr_t *addr, size_t *len)
 	if (!heap->ops->phys)
 		return -ENODEV;
 
-	return heap->ops->phys(heap, buffer, addr, len);
+static void *ion_buffer_kmap_get(struct ion_buffer *buffer)
+{
+	void *vaddr;
+
+	if (buffer->kmap_cnt) {
+		if (buffer->kmap_cnt == INT_MAX)
+			return ERR_PTR(-EOVERFLOW);
+
+		buffer->kmap_cnt++;
+		return buffer->vaddr;
+	}
+	vaddr = buffer->heap->ops->map_kernel(buffer->heap, buffer);
+	if (WARN_ONCE(vaddr == NULL,
+			"heap->ops->map_kernel should return ERR_PTR on error"))
+		return ERR_PTR(-EINVAL);
+	if (IS_ERR(vaddr))
+		return vaddr;
+	buffer->vaddr = vaddr;
+	buffer->kmap_cnt++;
+	return vaddr;
 }
 
 static struct sg_table *ion_dup_sg_table(struct device *dev,
 					 struct ion_buffer *buffer)
 {
-	struct sg_table *orig_table = buffer->sg_table;
-	unsigned int nents = orig_table->nents;
-	struct scatterlist *sg_d, *sg_s;
-	struct buffer_map *bmap;
+	struct ion_buffer *buffer = handle->buffer;
+	void *vaddr;
+
+	if (handle->kmap_cnt) {
+		if (handle->kmap_cnt == INT_MAX)
+			return ERR_PTR(-EOVERFLOW);
+
+		handle->kmap_cnt++;
+		return buffer->vaddr;
+	}
+	vaddr = ion_buffer_kmap_get(buffer);
+	if (IS_ERR(vaddr))
+		return vaddr;
+	handle->kmap_cnt++;
+	return vaddr;
+}
+
+static void ion_buffer_kmap_put(struct ion_buffer *buffer)
+{
+	buffer->kmap_cnt--;
+	if (!buffer->kmap_cnt) {
+		buffer->heap->ops->unmap_kernel(buffer->heap, buffer);
+		buffer->vaddr = NULL;
+	}
+}
+
+static void ion_handle_kmap_put(struct ion_handle *handle)
+{
+	struct ion_buffer *buffer = handle->buffer;
+
+	if (!handle->kmap_cnt) {
+		WARN(1, "%s: Double unmap detected! bailing...\n", __func__);
+		return;
+	}
+	handle->kmap_cnt--;
+	if (!handle->kmap_cnt)
+		ion_buffer_kmap_put(buffer);
+}
+
+void *ion_map_kernel(struct ion_client *client, struct ion_handle *handle)
+{
+	struct ion_buffer *buffer;
+	void *vaddr;
+
+	mutex_lock(&client->lock);
+	if (!ion_handle_validate(client, handle)) {
+		pr_err("%s: invalid handle passed to map_kernel.\n",
+		       __func__);
+		mutex_unlock(&client->lock);
+		return ERR_PTR(-EINVAL);
+	}
+
+	buffer = handle->buffer;
+
+	if (!handle->buffer->heap->ops->map_kernel) {
+		pr_err("%s: map_kernel is not implemented by this heap.\n",
+		       __func__);
+		mutex_unlock(&client->lock);
+		return ERR_PTR(-ENODEV);
+	}
+
+	mutex_lock(&buffer->lock);
+	vaddr = ion_handle_kmap_get(handle);
+	mutex_unlock(&buffer->lock);
+	mutex_unlock(&client->lock);
+	return vaddr;
+}
+EXPORT_SYMBOL(ion_map_kernel);
+
+void ion_unmap_kernel(struct ion_client *client, struct ion_handle *handle)
+{
+	struct ion_buffer *buffer;
+
+	mutex_lock(&client->lock);
+	buffer = handle->buffer;
+	mutex_lock(&buffer->lock);
+	ion_handle_kmap_put(handle);
+	mutex_unlock(&buffer->lock);
+	mutex_unlock(&client->lock);
+}
+EXPORT_SYMBOL(ion_unmap_kernel);
+
+static int ion_debug_client_show(struct seq_file *s, void *unused)
+{
+	struct ion_client *client = s->private;
+	struct rb_node *n;
+	size_t sizes[ION_NUM_HEAP_IDS] = {0};
+	const char *names[ION_NUM_HEAP_IDS] = {NULL};
+	int i;
+
+	mutex_lock(&client->lock);
+	for (n = rb_first(&client->handles); n; n = rb_next(n)) {
+		struct ion_handle *handle = rb_entry(n, struct ion_handle,
+						     node);
+		unsigned int id = handle->buffer->heap->id;
+
+		if (!names[id])
+			names[id] = handle->buffer->heap->name;
+		sizes[id] += handle->buffer->size;
+	}
+	mutex_unlock(&client->lock);
+
+	seq_printf(s, "%16.16s: %16.16s\n", "heap_name", "size_in_bytes");
+	for (i = 0; i < ION_NUM_HEAP_IDS; i++) {
+		if (!names[i])
+			continue;
+		seq_printf(s, "%16.16s: %16zu\n", names[i], sizes[i]);
+	}
+	return 0;
+}
+
+static int ion_debug_client_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ion_debug_client_show, inode->i_private);
+}
+
+static const struct file_operations debug_client_fops = {
+	.open = ion_debug_client_open,
+	.read = seq_read,
+	.llseek = seq_lseek,
+	.release = single_release,
+};
+
+static int ion_get_client_serial(const struct rb_root *root,
+					const unsigned char *name)
+{
+	int serial = -1;
+	struct rb_node *node;
+
+	for (node = rb_first(root); node; node = rb_next(node)) {
+		struct ion_client *client = rb_entry(node, struct ion_client,
+						node);
+
+		if (strcmp(client->name, name))
+			continue;
+		serial = max(serial, client->display_serial);
+	}
+	return serial + 1;
+}
+
+struct ion_client *ion_client_create(struct ion_device *dev,
+				     const char *name)
+{
+	struct ion_client *client;
+	struct task_struct *task;
+	struct rb_node **p;
+	struct rb_node *parent = NULL;
+	struct ion_client *entry;
+	pid_t pid;
+
+	if (!name) {
+		pr_err("%s: Name cannot be null\n", __func__);
+		return ERR_PTR(-EINVAL);
+	}
+
+	get_task_struct(current->group_leader);
+	task_lock(current->group_leader);
+	pid = task_pid_nr(current->group_leader);
+	/*
+	 * don't bother to store task struct for kernel threads,
+	 * they can't be killed anyway
+	 */
+	if (current->group_leader->flags & PF_KTHREAD) {
+		put_task_struct(current->group_leader);
+		task = NULL;
+	} else {
+		task = current->group_leader;
+	}
+	task_unlock(current->group_leader);
+
+	client = kzalloc(sizeof(struct ion_client), GFP_KERNEL);
+	if (!client)
+		goto err_put_task_struct;
+
+	client->dev = dev;
+	client->handles = RB_ROOT;
+	idr_init(&client->idr);
+	mutex_init(&client->lock);
+	client->task = task;
+	client->pid = pid;
+	client->name = kstrdup(name, GFP_KERNEL);
+	if (!client->name)
+		goto err_free_client;
+
+	down_write(&dev->lock);
+	client->display_serial = ion_get_client_serial(&dev->clients, name);
+	client->display_name = kasprintf(
+		GFP_KERNEL, "%s-%d", name, client->display_serial);
+	if (!client->display_name) {
+		up_write(&dev->lock);
+		goto err_free_client_name;
+	}
+	p = &dev->clients.rb_node;
+	while (*p) {
+		parent = *p;
+		entry = rb_entry(parent, struct ion_client, node);
+
+		if (client < entry)
+			p = &(*p)->rb_left;
+		else if (client > entry)
+			p = &(*p)->rb_right;
+	}
+	rb_link_node(&client->node, parent, p);
+	rb_insert_color(&client->node, &dev->clients);
+
+	client->debug_root = debugfs_create_file(client->display_name, 0664,
+						dev->clients_debug_root,
+						client, &debug_client_fops);
+	if (!client->debug_root) {
+		char buf[256], *path;
+
+		path = dentry_path(dev->clients_debug_root, buf, 256);
+		pr_err("Failed to create client debugfs at %s/%s\n",
+			path, client->display_name);
+	}
+
+	up_write(&dev->lock);
+
+	return client;
+
+err_free_client_name:
+	kfree(client->name);
+err_free_client:
+	kfree(client);
+err_put_task_struct:
+	if (task)
+		put_task_struct(current->group_leader);
+	return ERR_PTR(-ENOMEM);
+}
+EXPORT_SYMBOL(ion_client_create);
+
+void ion_client_destroy(struct ion_client *client)
+{
+	struct ion_device *dev = client->dev;
+	struct rb_node *n;
+
+	pr_debug("%s: %d\n", __func__, __LINE__);
+	while ((n = rb_first(&client->handles))) {
+		struct ion_handle *handle = rb_entry(n, struct ion_handle,
+						     node);
+		ion_handle_destroy(&handle->ref);
+	}
+
+	idr_destroy(&client->idr);
+
+	down_write(&dev->lock);
+	if (client->task)
+		put_task_struct(client->task);
+	rb_erase(&client->node, &dev->clients);
+	debugfs_remove_recursive(client->debug_root);
+	up_write(&dev->lock);
+
+	kfree(client->display_name);
+	kfree(client->name);
+	kfree(client);
+}
+EXPORT_SYMBOL(ion_client_destroy);
+
+struct sg_table *ion_sg_table(struct ion_client *client,
+			      struct ion_handle *handle)
+{
+	struct ion_buffer *buffer;
 	struct sg_table *table;
 	bool found = false;
 
